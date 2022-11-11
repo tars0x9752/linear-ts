@@ -1,33 +1,21 @@
-import { assert, expect, test, describe, it } from 'vitest'
+import { expect, test, describe } from 'vitest'
 
-describe('suite name', () => {
-  test('Math.sqrt()', () => {
-    expect(Math.sqrt(4)).toBe(2)
-    expect(Math.sqrt(144)).toBe(12)
-    expect(Math.sqrt(2)).toBe(Math.SQRT2)
+import { apply, infixL } from '../src/main'
+
+describe('apply', () => {
+  test('Function application', () => {
+    const greet = (name: string) => `Hello ${name}`
+
+    const res = apply(greet, 'world').res
+
+    expect(res).toBe('Hello world')
   })
 
-  test('JSON', () => {
-    const input = {
-      foo: 'hello',
-      bar: 'world'
-    }
+  test('Various arguments', () => {
+    const f = (a: string, b: number, c: number) => `${a}${b * c}`
 
-    const output = JSON.stringify(input)
+    const res = apply(f, '2*3=', 2, 3).res
 
-    expect(output).eq('{"foo":"hello","bar":"world"}')
-    assert.deepEqual(JSON.parse(output), input, 'matches original')
-  })
-
-  it('foo', () => {
-    assert.equal(Math.sqrt(4), 2)
-  })
-
-  it('bar', () => {
-    expect(1 + 1).eq(2)
-  })
-
-  it('snapshot', () => {
-    expect({ foo: 'bar' }).toMatchSnapshot()
+    expect(res).toBe('2*3=6')
   })
 })
