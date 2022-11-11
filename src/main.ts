@@ -43,3 +43,17 @@ function apply<T extends (...a: any[]) => any>(
     res,
   }
 }
+
+function infixL<LeftVal>(left: LeftVal) {
+  function infixF<RightVal, U>(func: (l: LeftVal, r: RightVal) => U) {
+    return {
+      infixR: (right: RightVal) => {
+        return apply(func, left, right)
+      },
+    }
+  }
+
+  return {
+    infixF,
+  }
+}
