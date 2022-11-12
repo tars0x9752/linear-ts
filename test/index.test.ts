@@ -88,8 +88,90 @@ describe('apply', () => {
 
     const double = (x: number) => x * 2
 
-    const res = apply(createNum).pipe(double).pipe(double).pipe(double).pipe(double).res
+    const res = apply(createNum)
+      .pipe(double)
+      .pipe(double)
+      .pipe(double)
+      .pipe(double).res
 
     expect(res).toBe(48)
+  })
+
+  test('infix * 1', () => {
+    const createNum = () => 3
+
+    const sum = (x: number, y: number) => x + y
+
+    const res = apply(createNum).infixF(sum).infixR(2).res
+
+    expect(res).toBe(5)
+  })
+
+  test('infix * 2', () => {
+    const createNum = () => 3
+
+    const sum = (x: number, y: number) => x + y
+
+    const mul = (x: number, y: number) => x * y
+
+    // (3 + 2) * 2 = 10
+    const res = apply(createNum).infixF(sum).infixR(2).infixF(mul).infixR(2).res
+
+    expect(res).toBe(10)
+  })
+
+  test('infix * 3', () => {
+    const createNum = () => 3
+
+    const sum = (x: number, y: number) => x + y
+
+    const mul = (x: number, y: number) => x * y
+
+    // (3 + 2) * 2 + 3 = 13
+    const res = apply(createNum)
+      .infixF(sum)
+      .infixR(2)
+      .infixF(mul)
+      .infixR(2)
+      .infixF(sum)
+      .infixR(3).res
+
+    expect(res).toBe(13)
+  })
+
+  test('infix * 4', () => {
+    const createNum = () => 3
+
+    const sum = (x: number, y: number) => x + y
+
+    const mul = (x: number, y: number) => x * y
+
+    // ((3 + 2) * 2 + 3) * 4  = 52
+    const res = apply(createNum)
+      .infixF(sum)
+      .infixR(2)
+      .infixF(mul)
+      .infixR(2)
+      .infixF(sum)
+      .infixR(3)
+      .infixF(mul)
+      .infixR(4).res
+
+    expect(res).toBe(52)
+  })
+
+  test('pipe then infix', () => {
+    const createNum = () => 3
+
+    const double = (x: number) => x * 2
+
+    const sum = (x: number, y: number) => x + y
+
+    const mul = (x: number, y: number) => x * y
+
+    // 3 * 2 + 1
+    const res = apply(createNum).pipe(double).infixF(sum).infixR(1).res
+
+    expect(res).toBe(7)
   })
 })
