@@ -6,10 +6,14 @@ export function apply<T extends (...a: any[]) => any>(
 ) {
   const res = func(...params)
 
-  function pipe<U>(nextFunc: (p: ReturnType<T>) => U) {
+  function pipe<U>(func2: (p: ReturnType<T>) => U, arg = res) {
+    const next = apply(func2, arg)
+
     return {
-      pipe,
-      res: nextFunc(res),
+      pipe: <V>(func3: (p: U) => V) => {
+        return pipe(func3, next.res)
+      },
+      res: next.res,
     }
   }
 
