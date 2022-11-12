@@ -4,7 +4,7 @@
     "lib": ["es2021"],
     "module": "es2022",
     "target": "es2021",
-    "declaration": true,
+    "declaration": false,
     "outDir": "./dist/esm",
     "strict": true,
     "esModuleInterop": true,
